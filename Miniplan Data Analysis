@@ -155,5 +155,26 @@ Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai re
     
 4. Menurut anda jika menggunakan teori Pareto, pembeli mana saja yang seharusnya menjadi fokus Aruna ?
 
+    Teori Pareto adalah sebuah teori yang menyatakan bahwa 80% dari hasil yang didapatkan berasal dari 20% penyebabnya. Dalam konteks pelanggan dan bisnis,
+    20% dari jumlah pelanggan akan memberikan 80% penghasilan usaha. Oleh karenanya Aruna dapat berfokus memberikan pelayanan terbaik pada 20% pelanggan penyumbang terbesar
+    hasil penjualan, serta memastikan bahwa 20% pelanggan tersebut memberikan 80% hasil penjualan.
     
+    Kita dapat melakukan query untuk melihat berapa jumlah pelanggan pada sales,
+    ```
+    SELECT DISTINCT pembeli FROM sales
+    ```
+    
+    Dari query di atas didapatkan keseluruhan pelanggan berjumlah 70 pelanggan. Kemudian 20% dari jumlah keseluruhan pelanggan yaitu 14 pelanggan. Di sini kita 
+    akan mencari 14 pelanggan yang paling menyumbang hasil penjualan. Dengan query berikut akan didapatkan pelanggan beserta amount yang didapatkan dari masing-
+    masing pelanggan dan akan diurutkan dari paling terbesar.
+    
+    ```
+    SELECT SUM(amount), pembeli
+    FROM sales
+    GROUP BY pembeli
+    ORDER BY SUM(amount) DESC
+    ```
+    
+    Dari query di atas dan dari hasil yang sudah didapatkan, kita dapat melihat 14 pelanggan dengan nilai amount teratas, yaitu :
+    1. 
     
