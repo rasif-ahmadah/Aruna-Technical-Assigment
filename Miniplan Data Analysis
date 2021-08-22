@@ -1,0 +1,159 @@
+**Data Preprocessing & Data Cleansing**
+
+Dari data yang diberikan yaitu data Miniplan, pada data tersebut terdapat 3 tab yaitu untuk data purchasing, data logistik, dan yang terakhir adalah data sales.
+Tentunya pada masing-masing data memiliki atribut-atribut yang terkait dengan data tersebut.
+Jika kita lihat pada data logistik terdapat atribut (kolom data) dengan nama route atau rute pengiriman, yang mana sebagian pada baris data pada kolom tersebut masih kosong.
+Pada proses preprocessing data ini, terdapat beberapa cara untuk mengatasi missing data. Cara pertama adalah dengan melakukan drop pada baris data yang 'missing' dan cara kedua
+adalah dengan menggunakan mean atau modus data. Akan digunakan nilai mean jika value datanya bersifat kontinyu, dan akan digunakan modus data jika datanya adalah kategorikal.
+Namun di sini kita perlu berhati-hati memilih teknik yang tepat, agar kevalidan data tetap terjaga. Untuk sementara dikarenakan datanya masih terlalu sedikit saya akan 
+membiarkan datanya tetap seperti itu, karena nantinya kita akan 'building schema' database, yang mungkin memperbolehkan pada suatu kolom berisikan data null.
+Sebelum melakukan import file excel yang diberikan, yang saya lakukan pertama adalah memisahkan masing-masing tab data (purchasing, logistik, sales) pada sheet baru 
+dengan format CSV. Ketika file sudah berformat CSV, maka dengan menggunakan tools kita dapat dengan mudah melakukan import data file pada database yang sudah kita buat nantinya.
+
+
+**Build Schema Database**
+
+Kali ini saya akan menggunakan XAMPP sebagai tool untuk membuat database dan melakukan query terhadapnya. Saya membuat database dengan nama 'aruna', 
+yang mana pada database tersebut terdapat 3 table, yaitu purchasing, logistik, dan sales. Masing-masing table memiliki kolom yang disesuaikan dengan atribut-atribut 
+pada data awal. Setelah database siap dengan kolom-kolom di dalamnya dan apabila tidak ada kesalahan, maka proses import akan berjalan lancar dan semua data pada 
+masing-masing file akan masuk dalam record data pada kolom-kolom sesuai dengan yang sudah didefinisikan.
+
+
+**Join Data**
+
+Untuk menjawab case-case yang diberikan, saya akan melakukan Join Data dari ketiga table pada database tersebut untuk melihat bagaimana relasi dari ketiga table tersebut,
+dan juga memudahkan untuk mendapatkan informasi yang ingin didapatkan yakni terkait dengan case pertanyaan. Berikut adalah query untuk JOIN data yang saya lakukan.
+
+```
+CREATE TABLE join_result
+
+SELECT DISTINCT
+	  purchasing.code_Pengiriman,
+    purchasing.qty AS purc_qty,
+    purchasing.amount AS purc_amount,
+    logistik.id_Pengiriman,
+    logistik.kode_Logistik,
+    logistik.qty AS log_qty,
+    logistik.amount AS log_amount,
+    sales.id_Logistic,
+    sales.qty AS sal_qty,
+    sales.amount AS sal_amount
+FROM ((purchasing
+    INNER JOIN logistik ON purchasing.code_Pengiriman = logistik.id_Pengiriman)
+    INNER JOIN sales ON logistik.kode_Logistik = sales.id_Logistic)
+    
+```
+
+Dengan query tersebut, saya akan membuat tabel baru untuk menyimpan data kode pengiriman, quantity, dan amount dari purchasing yang mungkin terdapat relasi dengan 
+id pengiriman dan kode logistik pada table logistik, serta dengan id logistik pada table sales. Dari query JOIN tersebut saya mendapatkan 212 baris data dan UNIQUE
+pada tiap barisnya.
+
+
+**Case**
+
+1. Berapa mean depresiasi ikan pada masing MP dari penjual hingga ke pembeli ?
+
+Menurut akuntansi yang dimaksud dengan depresiasi adalah nilai penyusutan, penurunan manfaat, atau penurunan kualitas. Nilai depresiasi dapat dihitung dengan beberapa
+metode. Sebagai contoh untuk menghitung biaya depresiasi adalah dengan mengurangkan biaya perolehan yang meliputi harga beli, biaya pengiriman, hingga pajak dengan
+nilai residu atau nilai dari aset ketika sudah tidak digunakan, kemudian membaginya dengan perkiraan masa manfaat. Namun dikarenakan saya belum terlalu paham jika menggunakan
+data yang diberikan, maka dari itu saya akan mencoba menganalisisnya dari nilai penurunan quantity ikan pada masing-masing miniplan sebagai jawaban sementara berapakah mean
+depresiasi ikan dari penjual hingga pembeli pada masing-masing miniplan.
+
+Jika kita lihat data pada miniplan terdapat 4 kode miniplan yaitu SOQ, BPN, KDI, dan LSW, dari kode tersebut menunjukkan terdapat 4 miniplan. Untuk melihat ada tidaknya atau
+penurunan quantity ikan dari penjual hingga pembeli, maka langkah pertama yang saya lakukan adalah dengan melihat rata-rata dari kolom purchasing quantity dari table hasil 
+query JOIN yang sudah dilakukan. 
+
+```
+SELECT AVG(purc_qty) FROM join_result WHERE code_Pengiriman LIKE '%SOQ%'
+```
+
+Dari query di atas menghasilkan nilai rata-rata quantity ikan pada purchasing SOQ, dan menghasilkan nilai 50,301. Kemudian menggunakan query akan dicari nilai rata-rata 
+quantity ikan pada masing-masing miniplan.
+
+```
+SELECT AVG(purc_qty) FROM join_result WHERE code_Pengiriman LIKE '%BPN%'
+SELECT AVG(purc_qty) FROM join_result WHERE code_Pengiriman LIKE '%KDI%'
+SELECT AVG(purc_qty) FROM join_result WHERE code_Pengiriman LIKE '%LSW%'
+```
+
+Dari query-query di atas dapat disimpulkan nilai quantity dari proses purchasing pada,
+SOQ = 50,301
+BPN = 26,514
+KDI = 9,076
+LSW = NULL (dikarenakan kode LSW tidak berelasi dengan table logistik dan atau table sales)
+
+Kemudian untuk mendapatkan nilai rata-rata quantity dari table sales akan dilakukan query-query berikut,
+
+```
+SELECT AVG(sal_qty) FROM join_result WHERE code_Pengiriman LIKE '%SOQ%'
+SELECT AVG(sal_qty) FROM join_result WHERE code_Pengiriman LIKE '%BPN%'
+SELECT AVG(sal_qty) FROM join_result WHERE code_Pengiriman LIKE '%KDI%'
+SELECT AVG(sal_qty) FROM join_result WHERE code_Pengiriman LIKE '%LSW%'
+```
+
+dan mendapatkan hasil rata-rata quantity sales sebagai berikut,
+SOQ = 65.851 
+BPN = 115.367
+KDI = 1.134
+LSW = NULL
+
+Dari hasil rata-rata quantity pada sales dan purchasing di masing-masing miniplan, yang menunjukkan adanya penurunan quantity dari penjual hingga pembeli adalah pada
+miniplan dengan kode KDI, yaitu dari nilai rata-rata 9,076 menjadu 1,134.
+
+
+2. Manakah MP yang memiliki nilai revenue rata tertinggi ?
+
+Revenue adalah pendapatan yang diterima atau kekayaan sementara yang diperoleh dari aktivitas utamanya. Di sini saya akan menggunakan atribut amount pada table sales
+untuk mengambil kesimpulan dari pertanyaan di atas. Dengan query-query di bawah ini saya akan mendapatkan nilai rata-rata amount dari masing-masing miniplan yang berhasil
+terjual pada sales.
+
+```
+SELECT AVG(sal_amount) FROM join_result WHERE code_Pengiriman LIKE '%SOQ%'
+SELECT AVG(sal_amount) FROM join_result WHERE code_Pengiriman LIKE '%BPN%'
+SELECT AVG(sal_amount) FROM join_result WHERE code_Pengiriman LIKE '%KDI%'
+SELECT AVG(sal_amount) FROM join_result WHERE code_Pengiriman LIKE '%LSW%'
+```
+
+dan menghasilkan nilai rata-rata amount pada masing-masing miniplan seperti berikut,
+SOQ = 555822,85
+BPN = 2248057,085
+KDI = 16000
+LSW = NULL
+
+Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai revenue sementara yang tertinggi adalah pada miniplan dengan kode BPN.
+
+
+3. Kesimpulan apa yang bisa diambil dari data tersebut ?
+
+- Dimungkinkan karena datanya masih sedikit atau mungkin terpotong, sehingga tidak semua komoditas dari miniplan/purchase tertentu masuk pada proses logistik atau sales.
+- Quantity ikan yang dihasilkan dari masing-masing miniplan dimungkinkan beragam, hal tersebut juga mungkin berpengaruh pada price dan juga amount. Untuk lebih jelasnya
+  kita dapat melakukan Exploratory Data Analysis (EDA) menggunakan Python untuk melihat kemungkinan korelasi dan hubungan antar variable, serta bagaimana varian datanya.
+- Dari data sementara tersebut nilai rata-rata amount yang didapatkan dari proses purchasing kemudian logistik hingga sales mengalami penurunan.
+
+
+**Additional Case**
+
+1. Menurut anda miniplan mana yang paling efisien dalam melakukan bisnis proses ?
+
+    Menurut saya dan berdasarkan data yang tersedia, miniplan yang paling efesien dalam proses bisnis adalah miniplan dengan kode 'SOQ'. 
+    Alasan yang mendasari jawaban saya tersebut adalah dikarenakan gap atau penurunan nilai rata-rata amount dari proses purchasing hingga sales lebih kecil daripada
+    penurunan pada miniplan dengan kode-kode yang lain (BPN, KDI, LSW).
+    
+2. Menurut anda komoditas apa yang seharusnya ditingkatkan untuk menaikkan bisnis aruna ?
+
+    Jika dilihat dari data purchasing, komoditas yang tersedia yaitu udang dan kepiting. Berdasarkan data tersebut, terdapat selisih yang cukup tinggi antara quantity 
+    udang dan kepiting, begitu juga dengan amount yang didapatkan. Komoditas udang memiliki nilai lebih tinggi daripada kepiting. Menurut saya jika sudah ada potensi 
+    pada suatu komoditas, maka perlu adanya maintenance bahkan peningkatan pada suatu potensi tersebut. Mulai dari pelayanan dengan nelayan, pelanggan, dan orang-orang 
+    yang bersangkutan, serta peningkatan bisnis proses yang efesien dari purchasing hingga sales. Namun tidak hanya berfokus pada komoditas yang lebih berpotensi memberikan
+    keuntungan, namun kita juga perlu mengevaluasi kembali apa yang menyebabkan suatu komoditas yang lain tidak dapat mencapai nilai atau angka tertentu atau mengalami
+    penurunan.
+    
+3. Menurut anda Miniplan (MP) mana yang memiliki layanan paling baik ke Nelayan ?
+
+    Menurut saya miniplan dengan kode KDI lebih baik daripada miniplan lain, dikarenakan jumlah nelayan yang dilayani lebih banyak daripada miniplan lain. 
+    Hal tersebut menunjukkan bahwa dengan pelayanan yang baik dapat menambah jaringan dengan nelayan-nelayan untuk dapat percaya dan bekerja sama dengan Aruna.
+    
+4. Menurut anda jika menggunakan teori Pareto, pembeli mana saja yang seharusnya menjadi fokus Aruna ?
+
+    
+    
