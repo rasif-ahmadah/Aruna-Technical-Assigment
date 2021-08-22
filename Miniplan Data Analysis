@@ -28,7 +28,7 @@ dan juga memudahkan untuk mendapatkan informasi yang ingin didapatkan yakni terk
 CREATE TABLE join_result
 
 SELECT DISTINCT
-	  purchasing.code_Pengiriman,
+    purchasing.code_Pengiriman,
     purchasing.qty AS purc_qty,
     purchasing.amount AS purc_amount,
     logistik.id_Pengiriman,
