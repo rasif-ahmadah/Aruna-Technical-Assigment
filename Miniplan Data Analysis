@@ -103,7 +103,7 @@ miniplan dengan kode KDI, yaitu dari nilai rata-rata 9,076 menjadi 1,134.
 
 2. Manakah MP yang memiliki nilai revenue rata tertinggi ?
 
-Revenue adalah pendapatan yang diterima atau kekayaan sementara yang diperoleh dari aktivitas utamanya. Di sini saya akan menggunakan atribut amount pada table sales
+Revenue adalah pendapatan yang diterima atau kekayaan sementara yang diperoleh dari aktivitas utamanya. Di sini saya akan menggunakan atribut atau kolom sales amount
 untuk mengambil kesimpulan dari pertanyaan di atas. Dengan query-query di bawah ini saya akan mendapatkan nilai rata-rata amount dari masing-masing miniplan yang berhasil
 terjual pada sales.
 
@@ -176,6 +176,7 @@ Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai re
     ```
     
     Dari query di atas dan dari hasil yang sudah didapatkan, kita dapat melihat 14 pelanggan dengan nilai amount teratas, yaitu :
+    
     1. Bapak Imam (Amount = 5.620.768)
     2. PT Marindo Makmur Usaha Maju (Amount = 5.216.145)
     3. Ikan Asap Bapak Toha (Amount = 3.304.630)
@@ -191,4 +192,6 @@ Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai re
     13. Bapak Deni (Amount = 2.2287.784)
     14. Pempek Kent (Amount = 1.187.270)
     
+    Maka data pembeli-pembeli di atas dapat dijadikan sebagai fokus Aruna. 
     
+ 
