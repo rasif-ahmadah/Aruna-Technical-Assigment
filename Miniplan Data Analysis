@@ -144,7 +144,7 @@ Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai re
     Jika dilihat dari data purchasing, komoditas yang tersedia yaitu udang dan kepiting. Berdasarkan data tersebut, terdapat selisih yang cukup tinggi antara quantity 
     udang dan kepiting, begitu juga dengan amount yang didapatkan. Komoditas udang memiliki nilai lebih tinggi daripada kepiting. Menurut saya jika sudah ada potensi 
     pada suatu komoditas, maka perlu adanya maintenance bahkan peningkatan pada suatu potensi tersebut. Mulai dari pelayanan dengan nelayan, pelanggan, dan orang-orang 
-    yang bersangkutan, serta peningkatan bisnis proses yang efesien dari purchasing hingga sales. Namun tidak hanya berfokus pada komoditas yang lebih berpotensi memberikan
+    yang bersangkutan, serta peningkatan bisnis proses yang efesien dari purchasing hingga sales. Tidak hanya berfokus pada komoditas yang lebih berpotensi memberikan
     keuntungan, namun kita juga perlu mengevaluasi kembali apa yang menyebabkan suatu komoditas yang lain tidak dapat mencapai nilai atau angka tertentu atau mengalami
     penurunan.
     
@@ -176,5 +176,19 @@ Dari hasil query di atas dapat disimpulkan rata-rata nilai amount untuk nilai re
     ```
     
     Dari query di atas dan dari hasil yang sudah didapatkan, kita dapat melihat 14 pelanggan dengan nilai amount teratas, yaitu :
-    1. 
+    1. Bapak Imam (Amount = 5.620.768)
+    2. PT Marindo Makmur Usaha Maju (Amount = 5.216.145)
+    3. Ikan Asap Bapak Toha (Amount = 3.304.630)
+    4. Ikan Pindang Bapak Effendi (Amount = 3.290.448)
+    5. Ikan Pindang Bapak Solkan (Amount = 3.277.848)
+    6. Ikan Asap Ibu Wuryanto (Amount = 3.272.304)
+    7. PT Agromina Wicaksana (Amount = 3.228.973)
+    8. PT Graha Makmur Cipta Pratama (Amount = 2.662.920)
+    9. Bapak Chalit (Amount = 2.358.532)
+    10. Bapak Indra (Amount = 2.350.440)
+    11. CV Karya Samudera (Amount = 2.325.840)
+    12. PT Berkat Agung Indonesia (Amount = 2.301.000)
+    13. Bapak Deni (Amount = 2.2287.784)
+    14. Pempek Kent (Amount = 1.187.270)
+    
     
